@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>QuizForge — Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1c1c28;--border:#2a2a3d;--accent:#7c6fff;--accent2:#ff6b8a;--accent3:#00e5c0;--text:#f0f0fa;--muted:#7a7a9a;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+.container{max-width:820px;margin:0 auto;padding:48px 24px;}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;background:linear-gradient(120deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;}
+.subtitle{color:var(--muted);font-size:1rem;margin-bottom:40px;}
+h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.25rem;margin:36px 0 14px;display:flex;align-items:center;gap:10px;}
+h2 .step-num{background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+p{color:var(--muted);margin-bottom:12px;}
+a{color:var(--accent3);text-decoration:none;}a:hover{text-decoration:underline;}
+pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;overflow-x:auto;margin:14px 0;}
+code{font-family:'DM Mono',monospace;font-size:.87rem;color:var(--accent3);}
+pre code{color:#e0e0f0;}
+.note{background:rgba(124,111,255,.08);border:1px solid rgba(124,111,255,.25);border-radius:10px;padding:14px 18px;font-size:.88rem;color:var(--text);margin:14px 0;}
+.warn{background:rgba(255,179,71,.08);border:1px solid rgba(255,179,71,.25);border-radius:10px;padding:14px 18px;font-size:.88rem;color:#ffb347;margin:14px 0;}
+.success{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);border-radius:10px;padding:14px 18px;font-size:.88rem;color:var(--accent3);margin:14px 0;}
+.file-tree{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;font-family:'DM Mono',monospace;font-size:.85rem;line-height:2;}
+.ft-dir{color:var(--accent);}.ft-file{color:var(--muted);}
+ol,ul{padding-left:20px;color:var(--muted);}
+li{margin-bottom:6px;}
+nav-back{display:block;margin-bottom:24px;}
+.back-link{color:var(--muted);font-size:.88rem;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.back-link:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;margin-bottom:24px;font-size:.88rem;">← Back to QuizForge</a>
+
+  <h1>QuizForge Live — Setup Guide</h1>
+  <p class="subtitle">Get your live quiz platform running in ~20 minutes with a free Supabase backend.</p>
+
+  <!-- FILE STRUCTURE -->
+  <h2><span class="step-num">📁</span> Project Files</h2>
+  <div class="file-tree">
+    <div class="ft-dir">quizforge/</div>
+    <div style="margin-left:20px">
+      <div class="ft-file">├── index.html &nbsp;&nbsp;&nbsp;&nbsp;← Landing page (host login + participant join)</div>
+      <div class="ft-file">├── host.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Host dashboard (upload, manage room, live view)</div>
+      <div class="ft-file">├── participant.html ← Participant view (answer questions)</div>
+      <div class="ft-file">├── config.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← ⭐ YOUR SUPABASE KEYS GO HERE</div>
+      <div class="ft-file">├── supabase.js &nbsp;&nbsp;&nbsp;← Supabase client bootstrap</div>
+      <div class="ft-file">└── setup.html &nbsp;&nbsp;&nbsp;&nbsp;← This guide</div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <h2><span class="step-num">1</span> Create a Free Supabase Project</h2>
+  <ol>
+    <li>Go to <a href="https://supabase.com" target="_blank">supabase.com</a> and sign up (free)</li>
+    <li>Click <strong>New Project</strong>, give it a name like <code>quizforge</code></li>
+    <li>Choose a region close to your users, set a strong database password</li>
+    <li>Wait ~2 minutes for the project to spin up</li>
+  </ol>
+
+  <!-- STEP 2 -->
+  <h2><span class="step-num">2</span> Get Your API Keys</h2>
+  <ol>
+    <li>In your Supabase project, go to <strong>Settings → API</strong></li>
+    <li>Copy the <strong>Project URL</strong> (looks like <code>https://xyzabc.supabase.co</code>)</li>
+    <li>Copy the <strong>anon / public</strong> key (long string starting with <code>eyJ…</code>)</li>
+    <li>Open <code>config.js</code> and paste them in:</li>
+  </ol>
+  <pre><code>const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+</code></pre>
+
+  <!-- STEP 3 -->
+  <h2><span class="step-num">3</span> Create the Database Tables</h2>
+  <p>Go to <strong>Supabase → SQL Editor → New Query</strong> and run this SQL:</p>
+  <pre><code>-- ── ROOMS ──────────────────────────────────────────────────
+CREATE TABLE rooms (
+  id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  pin                 TEXT NOT NULL UNIQUE,
+  host_id             UUID REFERENCES auth.users(id),
+  quiz_title          TEXT DEFAULT 'My Quiz',
+  status              TEXT DEFAULT 'waiting',   -- waiting | active | ended
+  questions           TEXT,                      -- JSON array
+  current_question_index INT DEFAULT -1,
+  timer_seconds       INT DEFAULT 30,
+  show_leaderboard    BOOLEAN DEFAULT true,
+  allow_late_join     BOOLEAN DEFAULT true,
+  created_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ── PARTICIPANTS ────────────────────────────────────────────
+CREATE TABLE participants (
+  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  room_id         UUID REFERENCES rooms(id) ON DELETE CASCADE,
+  nickname        TEXT NOT NULL,
+  score           INT DEFAULT 0,
+  correct_count   INT DEFAULT 0,
+  partial_count   INT DEFAULT 0,
+  joined_at       TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ── RESPONSES ───────────────────────────────────────────────
+CREATE TABLE responses (
+  id               UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  room_id          UUID REFERENCES rooms(id) ON DELETE CASCADE,
+  participant_id   UUID REFERENCES participants(id) ON DELETE CASCADE,
+  question_index   INT NOT NULL,
+  answer           TEXT,
+  is_correct       BOOLEAN DEFAULT false,
+  is_partial       BOOLEAN DEFAULT false,
+  points_awarded   INT DEFAULT 0,
+  score_after      INT DEFAULT 0,
+  answered_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ── INDEXES ─────────────────────────────────────────────────
+CREATE INDEX idx_participants_room ON participants(room_id);
+CREATE INDEX idx_responses_room    ON responses(room_id);
+CREATE INDEX idx_responses_part    ON responses(participant_id);
+CREATE INDEX idx_rooms_pin         ON rooms(pin);
+</code></pre>
+
+  <!-- STEP 4 -->
+  <h2><span class="step-num">4</span> Set Row Level Security Policies</h2>
+  <p>Still in SQL Editor, run this to allow the right access:</p>
+  <pre><code>-- Enable RLS
+ALTER TABLE rooms        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE participants ENABLE ROW LEVEL SECURITY;
+ALTER TABLE responses    ENABLE ROW LEVEL SECURITY;
+
+-- Rooms: hosts can manage their own; everyone can read active rooms
+CREATE POLICY "Hosts manage own rooms"    ON rooms FOR ALL    USING (auth.uid() = host_id);
+CREATE POLICY "Anyone can read rooms"     ON rooms FOR SELECT USING (true);
+
+-- Participants: anyone can insert/read
+CREATE POLICY "Anyone can join"           ON participants FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can read parts"     ON participants FOR SELECT USING (true);
+CREATE POLICY "Parts update own score"    ON participants FOR UPDATE USING (true);
+
+-- Responses: anyone can insert/read
+CREATE POLICY "Anyone can respond"        ON responses FOR INSERT WITH CHECK (true);
+CREATE POLICY "Hosts can read responses"  ON responses FOR SELECT USING (true);
+</code></pre>
+
+  <!-- STEP 5 -->
+  <h2><span class="step-num">5</span> Enable Realtime</h2>
+  <ol>
+    <li>Go to <strong>Supabase → Database → Replication</strong></li>
+    <li>Make sure <strong>Realtime</strong> is enabled for: <code>rooms</code>, <code>participants</code>, <code>responses</code></li>
+    <li>Also go to <strong>Authentication → Providers</strong> and make sure <strong>Email</strong> is enabled</li>
+  </ol>
+  <div class="note">💡 Realtime is what makes participant lists and response counts update live on the host screen without refreshing.</div>
+
+  <!-- STEP 6 -->
+  <h2><span class="step-num">6</span> Deploy to Vercel (Free)</h2>
+  <ol>
+    <li>Push your <code>quizforge/</code> folder to a GitHub repository</li>
+    <li>Go to <a href="https://vercel.com" target="_blank">vercel.com</a>, sign in with GitHub</li>
+    <li>Click <strong>Add New Project</strong> → import your repo</li>
+    <li>Leave all settings default (it's a static site) → click <strong>Deploy</strong></li>
+    <li>Vercel gives you a URL like <code>quizforge.vercel.app</code></li>
+  </ol>
+  <div class="success">✅ That's it! Your quiz platform is live and accessible from any device worldwide.</div>
+
+  <!-- ALTERNATIVES -->
+  <h2><span class="step-num">🔄</span> Alternative: Run Locally</h2>
+  <p>If you just want to test locally, you need a simple HTTP server (opening HTML files directly won't work with Supabase auth):</p>
+  <pre><code># Option A — Python (installed on most Macs/Linux)
+cd quizforge
+python3 -m http.server 3000
+# Open http://localhost:3000
+
+# Option B — Node.js (npx, no install needed)
+npx serve quizforge -p 3000
+
+# Option C — VS Code Live Server extension
+# Right-click index.html → "Open with Live Server"
+</code></pre>
+
+  <!-- HOW IT WORKS -->
+  <h2><span class="step-num">⚡</span> How Real-time Works</h2>
+  <p>QuizForge uses two Supabase real-time mechanisms together:</p>
+  <ul>
+    <li><strong>Broadcast</strong> — Host sends events (new question, reveal, quiz end) directly to all participants via WebSocket channel. Zero DB writes needed, nearly instant.</li>
+    <li><strong>Postgres Changes</strong> — When a participant joins or submits a response, the DB change triggers a real-time event on the host's dashboard automatically.</li>
+  </ul>
+
+  <!-- FLOW -->
+  <h2><span class="step-num">🗺</span> Full Session Flow</h2>
+  <pre><code>HOST                                    PARTICIPANTS
+────                                    ────────────
+1. Upload CSV/Excel quiz
+2. Create Room → gets PIN ─────────────→ Enter PIN + Nickname
+3. See participants join live ←──────── Inserted into DB → host notified
+4. Click "Start Quiz"
+5. Question broadcast ─────────────────→ All participants see Q simultaneously
+6. Response bar fills live ←──────────── Answers saved to responses table
+7. Click "Reveal Answer" ──────────────→ Correct answers highlighted
+8. Click "Next Question" ──────────────→ Next question loads (with timer)
+   [repeat steps 5-8 for each Q]
+9. Click "End Quiz" ───────────────────→ Final scores shown
+10. Export Results (.xlsx)              Leaderboard + personal score
+</code></pre>
+
+  <!-- SCORING -->
+  <h2><span class="step-num">🏆</span> Scoring System</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0;">
+    <thead><tr style="background:var(--surface2);">
+      <th style="padding:9px 12px;text-align:left;color:var(--muted);border-bottom:1px solid var(--border)">Question Type</th>
+      <th style="padding:9px 12px;text-align:left;color:var(--muted);border-bottom:1px solid var(--border)">Full Correct</th>
+      <th style="padding:9px 12px;text-align:left;color:var(--muted);border-bottom:1px solid var(--border)">Partial</th>
+      <th style="padding:9px 12px;text-align:left;color:var(--muted);border-bottom:1px solid var(--border)">Wrong</th>
+    </tr></thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px">🔘 MCQ</td><td style="padding:9px 12px;color:var(--accent3)">10 pts</td><td style="padding:9px 12px;color:var(--muted)">—</td><td style="padding:9px 12px;color:var(--wrong)">0 pts</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px">☑️ Multi-Select</td><td style="padding:9px 12px;color:var(--accent3)">10 pts</td><td style="padding:9px 12px;color:#ffb347">5 pts</td><td style="padding:9px 12px;color:var(--wrong)">0 pts</td></tr>
+      <tr><td style="padding:9px 12px">✍️ Open Ended</td><td style="padding:9px 12px;color:var(--accent3)">10 pts (self-marked)</td><td style="padding:9px 12px;color:#ffb347">5 pts (self-marked)</td><td style="padding:9px 12px;color:var(--wrong)">0 pts</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">⚠️ Open-ended scoring is self-reported by participants. For competitive settings, consider using only MCQ/Multi-select question types.</div>
+
+  <br>
+  <a href="index.html" style="color:var(--accent3)">← Back to QuizForge</a>
+</div>
+</body>
+</html>
