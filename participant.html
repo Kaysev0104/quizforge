@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-<title>QuizForge — Join Quiz</title>
+<title>UBI QuizZone — Join</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1c1c28;--border:#2a2a3d;--accent:#7c6fff;--accent2:#ff6b8a;--accent3:#00e5c0;--text:#f0f0fa;--muted:#7a7a9a;--correct:#00e5a0;--wrong:#ff5a72;--warn:#ffb347;--radius:16px;}
@@ -11,64 +11,61 @@
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(124,111,255,.18) 0%,transparent 60%),radial-gradient(ellipse 50% 35% at 80% 80%,rgba(255,107,138,.12) 0%,transparent 60%);}
 .app{flex:1;display:flex;flex-direction:column;position:relative;z-index:1;}
-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid var(--border);background:rgba(10,10,15,.8);backdrop-filter:blur(14px);}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--border);background:rgba(10,10,15,.8);backdrop-filter:blur(14px);}
+.logo-wrap{display:flex;flex-direction:column;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logo em{-webkit-text-fill-color:var(--accent2);font-style:normal;}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.player-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-size:.8rem;display:none;align-items:center;gap:8px;}
-.player-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;}
-.mode-chip{border-radius:999px;padding:4px 12px;font-size:.72rem;font-weight:600;display:none;}
+.nav-right{display:flex;align-items:center;gap:9px;}
+.player-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-size:.78rem;display:none;align-items:center;gap:7px;}
+.player-avatar{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff;}
+.mode-chip{border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:600;display:none;}
 .mode-chip.teacher{background:rgba(124,111,255,.15);color:var(--accent);border:1px solid rgba(124,111,255,.3);}
 .mode-chip.self{background:rgba(0,229,192,.12);color:var(--accent3);border:1px solid rgba(0,229,192,.3);}
-
 .view{display:none;flex:1;}
 .view.active{display:flex;flex-direction:column;animation:fadeUp .35s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* WAITING */
-.center-wrap{max-width:440px;margin:0 auto;padding:48px 20px;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;width:100%;}
-.wait-icon{font-size:3rem;}
+.center-wrap{max-width:420px;margin:0 auto;padding:44px 18px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;width:100%;}
+.wait-icon{font-size:2.8rem;}
 .wait-icon.spin{animation:spin 3s linear infinite;}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.center-wrap h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;}
-.center-wrap p{color:var(--muted);line-height:1.65;}
-.info-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 24px;width:100%;text-align:left;}
-.ib-row{margin-bottom:12px;}
-.ib-row:last-child{margin-bottom:0;}
-.ib-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;}
-.ib-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;color:var(--accent3);}
+.center-wrap h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;}
+.center-wrap p{color:var(--muted);line-height:1.65;font-size:.92rem;}
+.info-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 22px;width:100%;text-align:left;}
+.ib-row{margin-bottom:11px;}.ib-row:last-child{margin-bottom:0;}
+.ib-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px;}
+.ib-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:var(--accent3);}
 .ib-val.pin{letter-spacing:6px;}
+.rejoin-notice{background:rgba(0,229,192,.08);border:1px solid rgba(0,229,192,.2);border-radius:10px;padding:10px 14px;font-size:.8rem;color:var(--accent3);width:100%;text-align:center;}
 
 /* QUESTION */
-.q-wrap{max-width:600px;margin:0 auto;padding:22px 18px;display:flex;flex-direction:column;gap:14px;width:100%;}
-.q-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;}
-.q-progress{flex:1;min-width:120px;display:flex;flex-direction:column;gap:5px;}
-.q-progress-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);}
-.q-progress-bar{height:5px;background:var(--border);border-radius:999px;overflow:hidden;}
-.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:999px;transition:width .4s ease;}
-.timer-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:6px 15px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;white-space:nowrap;transition:all .3s;}
+.q-wrap{max-width:580px;margin:0 auto;padding:20px 16px;display:flex;flex-direction:column;gap:13px;width:100%;}
+.q-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.q-progress{flex:1;min-width:110px;display:flex;flex-direction:column;gap:4px;}
+.q-progress-labels{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);}
+.q-progress-bar{height:4px;background:var(--border);border-radius:999px;overflow:hidden;}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:999px;transition:width .4s;}
+.timer-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;white-space:nowrap;transition:all .3s;}
 .timer-chip.urgent{background:rgba(255,90,114,.15);border-color:var(--wrong);color:var(--wrong);}
 .timer-chip.hidden{display:none;}
-.score-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:5px 13px;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;}
-
-.q-type-tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 11px;font-size:.72rem;font-weight:600;}
+.score-chip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;}
+.q-type-tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:600;}
 .q-type-tag.mcq{background:rgba(124,111,255,.15);color:var(--accent);border:1px solid rgba(124,111,255,.3);}
 .q-type-tag.multi{background:rgba(0,229,192,.12);color:var(--accent3);border:1px solid rgba(0,229,192,.3);}
 .q-type-tag.open{background:rgba(255,107,138,.12);color:var(--accent2);border:1px solid rgba(255,107,138,.3);}
-
-.q-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative;overflow:hidden;}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;position:relative;overflow:hidden;}
 .q-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 .q-card.mcq-card::before{background:linear-gradient(90deg,var(--accent),var(--accent3));}
 .q-card.multi-card::before{background:linear-gradient(90deg,var(--accent3),#00b4d8);}
 .q-card.open-card::before{background:linear-gradient(90deg,var(--accent2),var(--warn));}
-.q-num{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
-.q-text{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;line-height:1.45;}
-
+.q-num{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
+.q-text{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;line-height:1.45;}
 .options-grid{display:flex;flex-direction:column;gap:9px;}
-.opt-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;text-align:left;font-family:'DM Sans',sans-serif;font-size:.93rem;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:11px;color:var(--text);animation:optIn .3s ease both;}
+.opt-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:12px 14px;text-align:left;font-family:'DM Sans',sans-serif;font-size:.9rem;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:11px;color:var(--text);animation:optIn .3s ease both;}
 .opt-btn:nth-child(1){animation-delay:.04s}.opt-btn:nth-child(2){animation-delay:.1s}.opt-btn:nth-child(3){animation-delay:.16s}.opt-btn:nth-child(4){animation-delay:.22s}
-@keyframes optIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
-.opt-ltr{width:27px;height:27px;border-radius:7px;background:var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;flex-shrink:0;transition:all .22s;}
+@keyframes optIn{from{opacity:0;transform:translateX(-11px)}to{opacity:1;transform:translateX(0)}}
+.opt-ltr{width:26px;height:26px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.76rem;flex-shrink:0;transition:all .22s;}
 .opt-btn:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
 .opt-btn:hover:not(:disabled) .opt-ltr{background:var(--accent);color:#fff;}
 .opt-btn.selected{border-color:var(--accent);background:rgba(124,111,255,.08);}
@@ -79,105 +76,95 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 .opt-btn.wrong .opt-ltr{background:var(--wrong);color:#fff;}
 .opt-btn.partial{border-color:var(--warn);background:rgba(255,179,71,.07);}
 .opt-btn:disabled{cursor:default;}
-.opt-btn .opt-chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;transition:all .18s;color:#fff;}
+.opt-btn .opt-chk{width:19px;height:19px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;transition:all .18s;color:#fff;}
 .opt-btn.selected .opt-chk{background:var(--accent);border-color:var(--accent);}
-.multi-hint{font-size:.77rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;}
-.submit-btn{width:100%;padding:13px;border-radius:12px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.submit-multi{background:linear-gradient(135deg,var(--accent3),#00b4d8);color:#0a0a0f;box-shadow:0 5px 18px rgba(0,229,192,.22);}
+.multi-hint{font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;}
+.submit-btn{width:100%;padding:12px;border-radius:11px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.submit-multi{background:linear-gradient(135deg,var(--accent3),#00b4d8);color:#0a0a0f;box-shadow:0 4px 16px rgba(0,229,192,.2);}
 .submit-multi:hover{transform:translateY(-2px);}
 .submit-multi:disabled{opacity:.4;cursor:default;transform:none;}
-.submit-open{background:linear-gradient(135deg,var(--accent2),#c4375b);color:#fff;box-shadow:0 5px 18px rgba(255,107,138,.28);}
+.submit-open{background:linear-gradient(135deg,var(--accent2),#c4375b);color:#fff;box-shadow:0 4px 16px rgba(255,107,138,.25);}
 .submit-open:hover{transform:translateY(-2px);}
 .submit-open:disabled{opacity:.4;cursor:default;transform:none;}
-
-/* Self-paced next button */
-.next-q-btn{background:linear-gradient(135deg,var(--accent),#5a4fd9);border:none;color:#fff;width:100%;padding:13px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .25s;display:none;box-shadow:0 5px 18px rgba(124,111,255,.28);}
+.next-q-btn{background:linear-gradient(135deg,var(--accent),#5a4fd9);border:none;color:#fff;width:100%;padding:12px;border-radius:11px;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .25s;display:none;box-shadow:0 4px 16px rgba(124,111,255,.25);}
 .next-q-btn:hover{transform:translateY(-2px);}
-
 .open-wrap{display:flex;flex-direction:column;gap:9px;}
-.open-ta{width:100%;min-height:115px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.93rem;padding:13px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.6;}
+.open-ta{width:100%;min-height:110px;background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:12px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.6;}
 .open-ta:focus{border-color:var(--accent2);}
 .open-ta::placeholder{color:var(--muted);}
-.char-count{font-size:.7rem;color:var(--muted);text-align:right;}
-.model-ans-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;display:none;animation:feedIn .3s ease both;}
-.ma-lbl{font-size:.68rem;color:var(--accent3);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
-.ma-txt{font-size:.88rem;line-height:1.6;}
-.self-mark-row{display:flex;gap:8px;}
-.sm-btn{flex:1;padding:10px 5px;border-radius:10px;border:1.5px solid var(--border);font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;background:var(--surface2);color:var(--text);transition:all .2s;}
+.char-count{font-size:.68rem;color:var(--muted);text-align:right;}
+.model-ans-box{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:12px 14px;display:none;animation:feedIn .3s ease both;}
+.ma-lbl{font-size:.66rem;color:var(--accent3);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.ma-txt{font-size:.86rem;line-height:1.6;}
+.self-mark-row{display:flex;gap:7px;}
+.sm-btn{flex:1;padding:9px 5px;border-radius:9px;border:1.5px solid var(--border);font-family:'Syne',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;background:var(--surface2);color:var(--text);transition:all .2s;}
 .sm-btn.got-it{border-color:var(--correct);color:var(--correct);}
 .sm-btn.got-it:hover{background:rgba(0,229,160,.1);}
 .sm-btn.partial-btn{border-color:var(--warn);color:var(--warn);}
 .sm-btn.partial-btn:hover{background:rgba(255,179,71,.1);}
 .sm-btn.missed-btn{border-color:var(--wrong);color:var(--wrong);}
 .sm-btn.missed-btn:hover{background:rgba(255,90,114,.1);}
-
-.feedback{border-radius:12px;padding:11px 14px;font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;display:none;animation:feedIn .3s ease both;line-height:1.5;}
+.feedback{border-radius:11px;padding:10px 13px;font-family:'Syne',sans-serif;font-weight:600;font-size:.86rem;display:none;animation:feedIn .3s ease both;line-height:1.5;}
 .feedback.correct{background:rgba(0,229,160,.1);color:var(--correct);border:1px solid rgba(0,229,160,.2);}
 .feedback.wrong{background:rgba(255,90,114,.1);color:var(--wrong);border:1px solid rgba(255,90,114,.2);}
 .feedback.partial-fb{background:rgba(255,179,71,.1);color:var(--warn);border:1px solid rgba(255,179,71,.2);}
 .feedback.open-fb{background:rgba(255,107,138,.08);color:var(--accent2);border:1px solid rgba(255,107,138,.2);}
 @keyframes feedIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.wait-next{text-align:center;padding:14px;color:var(--muted);font-style:italic;font-size:.84rem;display:none;}
 
 /* PAUSED OVERLAY */
-.paused-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;}
+.paused-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(7px);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center;padding:24px;}
 .paused-overlay.show{display:flex;}
-.paused-icon{font-size:3rem;}
-.paused-overlay h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;}
-.paused-overlay p{color:var(--muted);}
-
-.wait-next{text-align:center;padding:16px;color:var(--muted);font-style:italic;font-size:.86rem;display:none;}
+.paused-icon{font-size:2.8rem;}
+.paused-overlay h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;}
+.paused-overlay p{color:var(--muted);font-size:.9rem;}
 
 /* FINAL */
-.final-wrap{max-width:460px;margin:0 auto;padding:36px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;}
-.final-icon{font-size:3.5rem;animation:bounce .6s cubic-bezier(.36,.07,.19,.97) both;}
+.final-wrap{max-width:440px;margin:0 auto;padding:34px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;}
+.final-icon{font-size:3.2rem;animation:bounce .6s cubic-bezier(.36,.07,.19,.97) both;}
 @keyframes bounce{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
-.final-wrap h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.75rem;}
-.final-score-box{background:linear-gradient(135deg,rgba(124,111,255,.12),rgba(0,229,192,.08));border:1px solid var(--accent);border-radius:20px;padding:22px 30px;width:100%;}
-.fsb-score{font-family:'Syne',sans-serif;font-weight:800;font-size:2.8rem;color:var(--accent3);}
-.fsb-label{font-size:.78rem;color:var(--muted);margin-top:4px;}
-.final-stats{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;}
-.fstat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 18px;}
-.fstat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;}
-.fstat-lbl{font-size:.7rem;color:var(--muted);}
+.final-wrap h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.65rem;}
+.final-score-box{background:linear-gradient(135deg,rgba(124,111,255,.12),rgba(0,229,192,.08));border:1px solid var(--accent);border-radius:18px;padding:20px 28px;width:100%;}
+.fsb-score{font-family:'Syne',sans-serif;font-weight:800;font-size:2.6rem;color:var(--accent3);}
+.fsb-label{font-size:.75rem;color:var(--muted);margin-top:3px;}
+.final-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.fstat{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:12px 16px;}
+.fstat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;}
+.fstat-lbl{font-size:.68rem;color:var(--muted);}
 .fstat.good .fstat-num{color:var(--correct)}.fstat.bad .fstat-num{color:var(--wrong)}.fstat.warn .fstat-num{color:var(--warn)}
-.home-btn{background:linear-gradient(135deg,var(--accent),#5a4fd9);border:none;color:#fff;padding:13px 28px;border-radius:999px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;font-size:.95rem;transition:all .25s;box-shadow:0 6px 22px rgba(124,111,255,.3);}
+.home-btn{background:linear-gradient(135deg,var(--accent),#5a4fd9);border:none;color:#fff;padding:12px 26px;border-radius:999px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;font-size:.92rem;transition:all .25s;box-shadow:0 5px 20px rgba(124,111,255,.28);}
 .home-btn:hover{transform:translateY(-2px);}
 
-/* Animations */
 @keyframes wrongShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-9px) rotate(-1deg)}30%{transform:translateX(9px) rotate(1deg)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
 .shake{animation:wrongShake .5s ease both;}
 @keyframes correctPulse{0%{box-shadow:0 0 0 0 rgba(0,229,160,.6)}60%{box-shadow:0 0 0 20px rgba(0,229,160,0)}100%{box-shadow:none}}
 .correct-glow{animation:correctPulse .65s ease forwards;}
-@keyframes scorePop{0%{transform:scale(1)}40%{transform:scale(1.4);color:var(--correct)}70%{transform:scale(.9)}100%{transform:scale(1)}}
-.score-pop{animation:scorePop .4s cubic-bezier(.36,.07,.19,.97) both;}
-
 #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999;width:100%;height:100%;}
 #wrongFlash{position:fixed;inset:0;pointer-events:none;z-index:9998;background:rgba(255,90,114,0);transition:background .08s;}
 #wrongFlash.flash{background:rgba(255,90,114,.18);}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border);padding:10px 20px;border-radius:999px;font-size:.84rem;transition:transform .3s;z-index:999;white-space:nowrap;}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border);padding:9px 20px;border-radius:999px;font-size:.83rem;transition:transform .3s;z-index:999;white-space:nowrap;}
 #toast.show{transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <canvas id="confettiCanvas"></canvas>
 <div id="wrongFlash"></div>
-
-<!-- PAUSED OVERLAY -->
 <div class="paused-overlay" id="pausedOverlay">
   <div class="paused-icon">⏸</div>
   <h3>Quiz Paused</h3>
-  <p>Your teacher has paused for a discussion.<br>Sit tight — it'll resume shortly.</p>
+  <p>Your teacher has paused for a discussion.<br>It will resume shortly!</p>
 </div>
-
 <div class="app">
 <nav>
-  <div class="logo">Quiz<em>Forge</em></div>
+  <div class="logo-wrap">
+    <div class="logo">UBI <em>Quiz</em>Zone</div>
+  </div>
   <div class="nav-right">
     <div class="mode-chip" id="modeChip"></div>
     <div class="player-chip" id="playerChip">
       <div class="player-avatar" id="playerAvatar"></div>
       <span id="playerNickNav"></span>
-      <span style="color:var(--accent3);font-weight:700;font-size:.85rem" id="playerScoreNav">0</span>
+      <span style="color:var(--accent3);font-weight:700;font-size:.82rem" id="playerScoreNav">0</span>
     </div>
   </div>
 </nav>
@@ -186,13 +173,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 <div class="view active" id="viewWaiting">
   <div class="center-wrap">
     <div class="wait-icon spin">⏳</div>
-    <h2>You're in! Waiting for the host…</h2>
-    <p>The quiz will begin shortly. Get ready!</p>
+    <h2>You're in!</h2>
+    <p>Waiting for the host to start the quiz. Get ready!</p>
+    <div id="rejoinNotice" class="rejoin-notice" style="display:none">🔄 Rejoined as the same participant — your progress is saved!</div>
     <div class="info-box">
       <div class="ib-row"><div class="ib-label">Your nickname</div><div class="ib-val" id="waitNick">—</div></div>
       <div class="ib-row"><div class="ib-label">Room PIN</div><div class="ib-val pin" id="waitPin">——</div></div>
     </div>
-    <div id="waitError" style="color:var(--wrong);font-size:.86rem;display:none;"></div>
+    <div id="waitError" style="color:var(--wrong);font-size:.84rem;display:none;"></div>
   </div>
 </div>
 
@@ -227,8 +215,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
       <button class="sm-btn missed-btn" id="smMissed">✗ Missed</button>
     </div>
     <div class="feedback" id="feedback"></div>
-
-    <!-- Self-paced: next button. Teacher-led: wait message -->
     <button class="next-q-btn" id="nextQBtn">Next Question →</button>
     <div class="wait-next" id="waitNext">⏳ Waiting for teacher to advance…</div>
   </div>
@@ -266,11 +252,14 @@ const params=new URLSearchParams(location.search);
 const PIN=params.get('pin')||'', NICK=decodeURIComponent(params.get('nick')||'');
 if(!PIN||!NICK) window.location.href='index.html';
 
+// Session key for refresh fix — stored in sessionStorage
+const SESSION_KEY=NICK.trim().toLowerCase()+'_'+PIN;
+
 let participantId=null, myScore=0, myCorrect=0, myPartial=0;
-let quizMode='teacher'; // set on quiz_start
-let allQuestions=[], currentQ=null, totalQ=0, qIndex=0, selfPacedIdx=0;
-let answered=false, timerInterval=null, multiSel=new Set(), channel=null;
-let _roomId=null;
+let quizMode='teacher', allQuestions=[], currentQ=null, totalQ=0, qIndex=0, selfPacedIdx=0;
+let answered=false, timerInterval=null, multiSel=new Set(), channel=null, _roomId=null;
+let questionStartTime=null; // for response time tracking
+let isRejoin=false;
 
 window.addEventListener('DOMContentLoaded',async()=>{
   $('waitNick').textContent=NICK; $('waitPin').textContent=PIN;
@@ -283,14 +272,40 @@ window.addEventListener('DOMContentLoaded',async()=>{
 });
 
 async function joinRoom(){
+  // Find room
   const{data:room,error}=await sb.from('rooms').select('*').eq('pin',PIN).maybeSingle();
-  if(error||!room){ $('waitError').style.display='block'; $('waitError').textContent='❌ Room not found. Check your PIN.'; return; }
-  if(room.status==='ended'){ $('waitError').style.display='block'; $('waitError').textContent='❌ This quiz has already ended.'; return; }
+  if(error||!room){ showError('❌ Room not found. Check your PIN.'); return; }
+  if(room.status==='ended'){ showError('❌ This quiz has already ended.'); return; }
   _roomId=room.id;
   totalQ=JSON.parse(room.questions||'[]').length;
-  const{data:p,error:pe}=await sb.from('participants').insert({room_id:room.id,nickname:NICK,score:0,correct_count:0,partial_count:0}).select().single();
-  if(pe){ $('waitError').style.display='block'; $('waitError').textContent='❌ Could not join: '+pe.message; return; }
-  participantId=p.id;
+
+  // ── REFRESH FIX: check if participant already exists with same session_key ──
+  const sessionKey=SESSION_KEY;
+  const{data:existing}=await sb.from('participants')
+    .select('*').eq('room_id',room.id).eq('session_key',sessionKey).maybeSingle();
+
+  if(existing){
+    // Rejoin — reuse existing participant
+    participantId=existing.id;
+    myScore=existing.score||0;
+    myCorrect=existing.correct_count||0;
+    myPartial=existing.partial_count||0;
+    isRejoin=true;
+    $('rejoinNotice').style.display='block';
+    $('playerScoreNav').textContent=myScore;
+    $('myScore').textContent=myScore;
+    toast('🔄 Rejoined — welcome back '+NICK+'!');
+  } else {
+    // New participant
+    const{data:p,error:pe}=await sb.from('participants').insert({
+      room_id:room.id, nickname:NICK, score:0, correct_count:0, partial_count:0,
+      session_key:sessionKey
+    }).select().single();
+    if(pe){ showError('❌ Could not join: '+pe.message); return; }
+    participantId=p.id;
+  }
+
+  // Subscribe to broadcasts
   channel=sb.channel('room-'+room.id)
     .on('broadcast',{event:'quiz_start'},payload=>handleStart(payload.payload))
     .on('broadcast',{event:'question'},payload=>{ if(quizMode==='teacher') handleQuestion(payload.payload); })
@@ -299,37 +314,55 @@ async function joinRoom(){
     .on('broadcast',{event:'resume'},()=>hidePause())
     .on('broadcast',{event:'quiz_end'},()=>showFinal())
     .subscribe();
+
+  // If room is already active (rejoin mid-quiz), handle accordingly
+  if(room.status==='active'&&isRejoin){
+    const mode=room.quiz_mode||'teacher';
+    quizMode=mode;
+    updateModeChip(mode);
+    if(mode==='self'){
+      const qs=JSON.parse(room.questions||'[]');
+      allQuestions=qs; totalQ=qs.length;
+      // Find which question they were on
+      const{data:resps}=await sb.from('responses').select('question_index').eq('participant_id',participantId).order('question_index',{ascending:false});
+      const lastAnswered=resps&&resps.length>0?resps[0].question_index+1:0;
+      selfPacedIdx=lastAnswered;
+      if(selfPacedIdx>=allQuestions.length){ showFinal(); return; }
+      renderSelfPacedQuestion();
+    }
+    // For teacher mode, wait for next question broadcast
+  }
 }
 
+function showError(msg){ $('waitError').style.display='block'; $('waitError').textContent=msg; }
+
 function handleStart(payload){
-  quizMode=payload.mode;
-  totalQ=payload.totalQuestions;
-  // Update nav mode chip
-  const mc=$('modeChip');
-  mc.className='mode-chip '+(quizMode==='teacher'?'teacher':'self');
-  mc.textContent=quizMode==='teacher'?'👨‍🏫 Teacher Led':'🧑‍💻 Self-Paced';
-  mc.style.display='flex';
-  if(quizMode==='self'){
-    // Self-paced: we got all questions in payload, start immediately
-    allQuestions=payload.questions||[];
-    selfPacedIdx=0;
+  quizMode=payload.mode; totalQ=payload.totalQuestions;
+  updateModeChip(payload.mode);
+  if(payload.mode==='self'){
+    allQuestions=payload.questions||[]; selfPacedIdx=0;
     renderSelfPacedQuestion();
   }
-  // Teacher-led: wait for 'question' broadcast
+}
+
+function updateModeChip(mode){
+  const mc=$('modeChip');
+  mc.className='mode-chip '+(mode==='teacher'?'teacher':'self');
+  mc.textContent=mode==='teacher'?'👨‍🏫 Teacher Led':'🧑‍💻 Self-Paced';
+  mc.style.display='flex';
 }
 
 // ══════════════ TEACHER LED ══════════════
 function handleQuestion({index,question,timeLimit}){
   qIndex=index; currentQ=question; answered=false; multiSel=new Set();
+  questionStartTime=Date.now();
   updateScoreDisplay();
   $('qLabel').textContent='Q '+(index+1); $('qFrac').textContent=(index+1)+'/'+totalQ;
   $('qFill').style.width=(index/totalQ*100)+'%';
   $('qNum').textContent='Question '+(index+1)+' of '+totalQ;
   $('qText').textContent=question.question;
-  setCardStyle(question.type);
-  resetPanels();
-  $('nextQBtn').style.display='none';
-  $('waitNext').style.display='none';
+  setCardStyle(question.type); resetPanels();
+  $('nextQBtn').style.display='none'; $('waitNext').style.display='none';
   if(question.type==='mcq'||question.type==='multi') renderOptions(question);
   else renderOpen();
   if(timeLimit>0){ $('timerChip').classList.remove('hidden'); startTimer(timeLimit); }
@@ -346,16 +379,14 @@ function renderSelfPacedQuestion(){
   if(selfPacedIdx>=allQuestions.length){ showFinal(); return; }
   const q=allQuestions[selfPacedIdx];
   qIndex=selfPacedIdx; currentQ=q; answered=false; multiSel=new Set();
+  questionStartTime=Date.now();
   updateScoreDisplay();
   $('qLabel').textContent='Q '+(selfPacedIdx+1); $('qFrac').textContent=(selfPacedIdx+1)+'/'+allQuestions.length;
   $('qFill').style.width=(selfPacedIdx/allQuestions.length*100)+'%';
   $('qNum').textContent='Question '+(selfPacedIdx+1)+' of '+allQuestions.length;
   $('qText').textContent=q.question;
-  setCardStyle(q.type);
-  resetPanels();
-  $('timerChip').classList.add('hidden'); // no timer in self-paced
-  $('waitNext').style.display='none';
-  $('nextQBtn').style.display='none';
+  setCardStyle(q.type); resetPanels();
+  $('timerChip').classList.add('hidden'); $('waitNext').style.display='none'; $('nextQBtn').style.display='none';
   if(q.type==='mcq'||q.type==='multi') renderOptions(q);
   else renderOpen();
   show('viewQuestion');
@@ -364,14 +395,10 @@ function renderSelfPacedQuestion(){
 function showNextSelfPaced(){
   $('nextQBtn').style.display='flex';
   $('nextQBtn').textContent=selfPacedIdx<allQuestions.length-1?'Next Question →':'Finish Quiz 🎉';
-  $('nextQBtn').onclick=()=>{
-    selfPacedIdx++;
-    if(selfPacedIdx>=allQuestions.length) showFinal();
-    else renderSelfPacedQuestion();
-  };
+  $('nextQBtn').onclick=()=>{ selfPacedIdx++; if(selfPacedIdx>=allQuestions.length) showFinal(); else renderSelfPacedQuestion(); };
 }
 
-// ══════════════ SHARED RENDER ══════════════
+// ══════════════ RENDER ══════════════
 function setCardStyle(type){
   const card=$('qCard'), tag=$('qTypeTag');
   card.className='q-card';
@@ -387,7 +414,6 @@ function resetPanels(){
   $('openTa').value=''; $('openTa').disabled=false;
   $('charCount').textContent='0 characters';
 }
-
 function renderOptions(q){
   const L=['A','B','C','D'], og=$('optGrid');
   og.innerHTML=''; og.style.display='flex';
@@ -407,9 +433,12 @@ function renderOpen(){
   $('submitOpenBtn').onclick=()=>submitOpen();
 }
 
-// ══════════════ ANSWER HANDLING ══════════════
+// ══════════════ ANSWERS ══════════════
+function getResponseTime(){ return questionStartTime?parseFloat(((Date.now()-questionStartTime)/1000).toFixed(1)):0; }
+
 async function submitMCQ(chosen,q){
   if(answered) return; answered=true; clearInterval(timerInterval);
+  const respTime=getResponseTime();
   const correct=q.answer, L=['A','B','C','D'];
   document.querySelectorAll('.opt-btn').forEach((b,i)=>{ b.disabled=true; if(L[i]===correct) b.classList.add('correct'); });
   const isCorrect=chosen===correct, pts=isCorrect?10:0;
@@ -417,12 +446,13 @@ async function submitMCQ(chosen,q){
   const clicked=Array.from(document.querySelectorAll('.opt-btn')).find(b=>b.dataset.letter===chosen);
   if(clicked) clicked.classList.add(isCorrect?'correct':'wrong');
   showFeedback(isCorrect,false,q.explanation,q.options[L.indexOf(correct)],correct);
-  await saveResponse(chosen,isCorrect,false,pts);
+  await saveResponse(chosen,isCorrect,false,pts,respTime,'',q.question,q.type);
   afterAnswer();
 }
 
 async function submitMultiAnswer(q){
   if(answered) return; answered=true; clearInterval(timerInterval);
+  const respTime=getResponseTime();
   $('submitMultiBtn').style.display='none';
   const L=['A','B','C','D'], correct=new Set(q.answer), chosen=new Set([...multiSel]);
   document.querySelectorAll('.opt-btn').forEach((b,i)=>{
@@ -436,11 +466,10 @@ async function submitMultiAnswer(q){
   const pts=full?10:part?5:0;
   if(full){myScore+=pts;myCorrect++;}else if(part){myScore+=pts;myPartial++;}
   showFeedback(full,part,q.explanation,null,null);
-  await saveResponse([...chosen],full,part,pts);
+  await saveResponse([...chosen],full,part,pts,respTime,'',q.question,q.type);
   afterAnswer();
 }
 $('submitMultiBtn').onclick=()=>submitMultiAnswer(currentQ);
-
 function toggleMulti(btn,letter,idx){
   if(answered) return;
   const chk=$('chk_'+idx);
@@ -451,17 +480,18 @@ function toggleMulti(btn,letter,idx){
 
 async function submitOpen(){
   const ans=$('openTa').value.trim(); if(!ans){toast('⚠ Write your answer first');return;}
+  const respTime=getResponseTime();
   answered=true; $('openTa').disabled=true; $('submitOpenBtn').disabled=true;
   $('modelAnsTxt').textContent=currentQ.answer; $('modelAnsBox').style.display='block';
   const fb=$('feedback');
   fb.textContent='📖 Compare your answer with the model answer, then self-mark.';
   fb.className='feedback open-fb'; fb.style.display='block';
   $('selfMarkRow').style.display='flex';
-  $('smGotIt').onclick=()=>selfMark('got-it',ans,10);
-  $('smPartial').onclick=()=>selfMark('partial',ans,5);
-  $('smMissed').onclick=()=>selfMark('missed',ans,0);
+  $('smGotIt').onclick=()=>selfMark('got-it',ans,10,respTime);
+  $('smPartial').onclick=()=>selfMark('partial',ans,5,respTime);
+  $('smMissed').onclick=()=>selfMark('missed',ans,0,respTime);
 }
-async function selfMark(mark,ans,pts){
+async function selfMark(mark,ans,pts,respTime){
   $('selfMarkRow').style.display='none';
   if(pts>0) myScore+=pts;
   if(mark==='got-it'){myCorrect++; launchConfetti();}
@@ -469,14 +499,14 @@ async function selfMark(mark,ans,pts){
   const fb=$('feedback');
   fb.textContent=mark==='got-it'?'✓ Marked correct!':mark==='partial'?'~ Marked partial':'✗ Marked missed';
   fb.className='feedback '+(mark==='got-it'?'correct':mark==='partial'?'partial-fb':'wrong');
-  await saveResponse(ans,mark==='got-it',mark==='partial',pts);
+  await saveResponse(mark,mark==='got-it',mark==='partial',pts,respTime,ans,currentQ.question,currentQ.type);
   afterAnswer();
 }
 
 function afterAnswer(){
   updateScoreDisplay();
   if(quizMode==='self') showNextSelfPaced();
-  else $('waitNext').style.display='block'; // teacher-led: wait for host
+  else $('waitNext').style.display='block';
 }
 
 function showFeedback(isCorrect,isPartial,explanation,correctText,correctLetter){
@@ -499,20 +529,19 @@ function showFeedback(isCorrect,isPartial,explanation,correctText,correctLetter)
   }
 }
 
-async function saveResponse(answer,isCorrect,isPartial,points){
+async function saveResponse(answer,isCorrect,isPartial,points,respTime,openText,qText,qType){
   await sb.from('responses').insert({
     room_id:_roomId, participant_id:participantId, question_index:qIndex,
     answer:JSON.stringify(answer), is_correct:isCorrect, is_partial:isPartial,
-    points_awarded:points, score_after:myScore, answered_at:new Date().toISOString()
+    points_awarded:points, score_after:myScore, answered_at:new Date().toISOString(),
+    response_time_seconds:respTime,
+    open_answer_text:openText||'',
+    question_text:qText||'',
+    question_type:qType||''
   });
   await sb.from('participants').update({score:myScore,correct_count:myCorrect,partial_count:myPartial}).eq('id',participantId);
 }
 
-// ══════════════ PAUSE / RESUME ══════════════
-function showPause(){ $('pausedOverlay').classList.add('show'); }
-function hidePause(){ $('pausedOverlay').classList.remove('show'); }
-
-// ══════════════ TIMER ══════════════
 function startTimer(t){
   clearInterval(timerInterval);
   $('timerChip').textContent=t; $('timerChip').className='timer-chip';
@@ -523,11 +552,10 @@ function startTimer(t){
   },1000);
 }
 
-function updateScoreDisplay(){
-  $('playerScoreNav').textContent=myScore; $('myScore').textContent=myScore;
-}
+function updateScoreDisplay(){ $('playerScoreNav').textContent=myScore; $('myScore').textContent=myScore; }
+function showPause(){ $('pausedOverlay').classList.add('show'); }
+function hidePause(){ $('pausedOverlay').classList.remove('show'); }
 
-// ══════════════ FINAL ══════════════
 function showFinal(){
   clearInterval(timerInterval);
   const total=quizMode==='self'?allQuestions.length:totalQ;
@@ -544,7 +572,7 @@ function showFinal(){
 
 function hashCode(s){let h=0;for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}return h;}
 
-// ══════════════ CONFETTI ══════════════
+// CONFETTI
 const canvas=$('confettiCanvas'),ctx=canvas.getContext('2d');
 let particles=[],animId=null;
 const COLS=['#7c6fff','#ff6b8a','#00e5c0','#ffd700','#ff9f43','#54a0ff','#2ed573','#eccc68'];
