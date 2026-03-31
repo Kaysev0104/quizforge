@@ -575,11 +575,31 @@ function setupLobby(pin){
   mb.textContent=quizMode==='teacher'?'👨‍🏫 Teacher Led':'🧑‍💻 Participant Led';
   $('quizSummaryText').textContent=questions.length+' questions · '+(quizMode==='teacher'?'Teacher Led':'Participant Led')+(timerSeconds>0?' · '+timerSeconds+'s':'');
   $('roomPill').style.display='flex'; generateQR(joinUrl); show('viewLobby');
-  channel=sb.channel('room-'+roomId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'participants',filter:'room_id=eq.'+roomId},payload=>addParticipant(payload.new))
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'responses',filter:'room_id=eq.'+roomId},payload=>handleResponse(payload.new))
-    .subscribe();
-  sb.from('participants').select('*').eq('room_id',roomId).then(({data})=>{if(data) data.forEach(p=>addParticipant(p));});
+
+  // FIX 1: Remove old channel first, create single shared channel
+  if(channel) sb.removeChannel(channel);
+  channel = sb.channel('room-'+roomId, {config:{broadcast:{self:true}}})
+    .on('postgres_changes',
+      {event:'INSERT', schema:'public', table:'participants'},
+      payload=>{ if(payload.new && payload.new.room_id===roomId) addParticipant(payload.new); })
+    .on('postgres_changes',
+      {event:'INSERT', schema:'public', table:'responses'},
+      payload=>{ if(payload.new && payload.new.room_id===roomId) handleResponse(payload.new); })
+    .subscribe((status)=>{
+      console.log('UBI QuizZone channel status:', status);
+    });
+
+  // FIX 2: Poll every 3s as reliable fallback — catches joins that miss realtime
+  if(window._lobbyPoll) clearInterval(window._lobbyPoll);
+  window._lobbyPoll = setInterval(async()=>{
+    const{data}=await sb.from('participants').select('*').eq('room_id',roomId);
+    if(data) data.forEach(p=>addParticipant(p));
+  }, 3000);
+
+  // Load any existing participants immediately
+  sb.from('participants').select('*').eq('room_id',roomId).then(({data})=>{
+    if(data) data.forEach(p=>addParticipant(p));
+  });
 }
 function addParticipant(p){
   if(participantMap[p.id]) return;
@@ -604,13 +624,14 @@ function hashCode(s){let h=0;for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.cha
 $('startQuizBtn').onclick=async()=>{
   if(!Object.keys(participantMap).length){toast('⚠ No participants yet!');return;}
   await sb.from('rooms').update({status:'active',current_question_index:0}).eq('id',roomId);
+  if(window._lobbyPoll){ clearInterval(window._lobbyPoll); window._lobbyPoll=null; }
   $('liveBadge').style.display='flex';
   if(quizMode==='teacher'){
     currentQ=0; responseCounts={}; answersRevealed=false; isPaused=false;
-    await sb.channel('room-'+roomId).send({type:'broadcast',event:'quiz_start',payload:{mode:'teacher',totalQuestions:questions.length}});
+    await channel.send({type:'broadcast',event:'quiz_start',payload:{mode:'teacher',totalQuestions:questions.length}});
     show('viewLive'); renderLiveQuestion();
   } else {
-    await sb.channel('room-'+roomId).send({type:'broadcast',event:'quiz_start',payload:{mode:'self',questions,totalQuestions:questions.length}});
+    await channel.send({type:'broadcast',event:'quiz_start',payload:{mode:'self',questions,totalQuestions:questions.length}});
     show('viewSelfPaced'); startSpMonitor();
   }
 };
@@ -645,7 +666,7 @@ function renderLiveQuestion(){
   } else {
     opts.innerHTML='<div style="color:var(--muted);font-size:.85rem;font-style:italic;padding:5px 0">Open-ended — free text</div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:.85rem;line-height:1.6"><strong style="font-size:.68rem;color:var(--accent3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Model Answer</strong>'+q.answer+'</div>';
   }
-  sb.channel('room-'+roomId).send({type:'broadcast',event:'question',payload:{index:currentQ,question:q,timeLimit:timerSeconds}});
+  channel.send({type:'broadcast',event:'question',payload:{index:currentQ,question:q,timeLimit:timerSeconds}});
   sb.from('rooms').update({current_question_index:currentQ}).eq('id',roomId);
   if(timerSeconds>0) startTimer();
   updateLeaderboard();
@@ -656,7 +677,7 @@ function startTimer(){
 }
 function autoReveal(){
   if(answersRevealed) return; answersRevealed=true;
-  sb.channel('room-'+roomId).send({type:'broadcast',event:'reveal',payload:{index:currentQ}});
+  channel.send({type:'broadcast',event:'reveal',payload:{index:currentQ}});
   updateLeaderboard();
 }
 $('pauseBtn').onclick=()=>{
@@ -664,12 +685,12 @@ $('pauseBtn').onclick=()=>{
   if(isPaused){
     $('pauseBtn').textContent='▶ Resume'; $('pauseBtn').className='ctrl-btn resume-btn';
     $('statusPillLive').style.display='none'; $('statusPillPaused').style.display='flex';
-    sb.channel('room-'+roomId).send({type:'broadcast',event:'pause',payload:{}});
+    channel.send({type:'broadcast',event:'pause',payload:{}});
     toast('⏸ Paused — discuss with your class');
   } else {
     $('pauseBtn').textContent='⏸ Pause'; $('pauseBtn').className='ctrl-btn pause-btn';
     $('statusPillLive').style.display='flex'; $('statusPillPaused').style.display='none';
-    sb.channel('room-'+roomId).send({type:'broadcast',event:'resume',payload:{}});
+    channel.send({type:'broadcast',event:'resume',payload:{}});
     toast('▶ Resumed');
   }
 };
@@ -760,7 +781,7 @@ $('endSpBtn').onclick=async()=>{if(!confirm('End quiz for everyone?')) return; a
 // END QUIZ
 async function endQuiz(){
   await sb.from('rooms').update({status:'ended'}).eq('id',roomId);
-  await sb.channel('room-'+roomId).send({type:'broadcast',event:'quiz_end',payload:{}});
+  await channel.send({type:'broadcast',event:'quiz_end',payload:{}});
   clearInterval(timerInterval);
   const{data:parts}=await sb.from('participants').select('*').eq('room_id',roomId).order('score',{ascending:false});
   const medals=['🥇','🥈','🥉'],body=$('finalResultsBody'); body.innerHTML='';
@@ -807,6 +828,7 @@ $('exportDetailedBtn').onclick=async()=>{
   XLSX.writeFile(wb,'UBI-QuizZone-Detailed-'+roomPin+'.xlsx'); toast('📋 Detailed report exported!');
 };
 $('newRoomBtn').onclick=()=>{
+  if(window._lobbyPoll){ clearInterval(window._lobbyPoll); window._lobbyPoll=null; }
   roomId=null;roomPin=null;questions=[];currentQ=0;participantMap={};spProgress={};
   if(channel) sb.removeChannel(channel);
   $('fileInput').value='';$('quizMetaBox').style.display='none';$('modeSelectorDiv').style.display='none';
