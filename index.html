@@ -4,88 +4,91 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>UBI QuizZone</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1c1c28;--border:#2a2a3d;--accent:#7c6fff;--accent2:#ff6b8a;--accent3:#00e5c0;--text:#f0f0fa;--muted:#7a7a9a;--radius:16px;}
+:root{--bg:#f4f6fb;--surface:#ffffff;--surface2:#eef0f8;--border:#dde0f0;--accent:#5b4de8;--accent2:#e8436e;--accent3:#009e87;--text:#1a1a2e;--muted:#6b7299;--radius:16px;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(124,111,255,.2) 0%,transparent 60%),
-    radial-gradient(ellipse 60% 40% at 85% 80%,rgba(255,107,138,.15) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 40% at 55% 40%,rgba(0,229,192,.07) 0%,transparent 55%);}
-nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;border-bottom:1px solid var(--border);background:rgba(10,10,15,.8);backdrop-filter:blur(16px);}
-.logo{display:flex;flex-direction:column;}
-.logo-main{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.logo-main em{-webkit-text-fill-color:var(--accent2);font-style:normal;}
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 10%,rgba(91,77,232,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 80%,rgba(232,67,110,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 55% 40%,rgba(0,158,135,.04) 0%,transparent 55%);}
+nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;border-bottom:1px solid var(--border);background:rgba(244,246,251,.92);backdrop-filter:blur(16px);}
+.logo-wrap{display:flex;flex-direction:column;}
+.logo{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.5rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo em{-webkit-text-fill-color:var(--accent2);font-style:normal;}
 .logo-sub{font-size:.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
 .nav-live{display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--accent3);}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 main{flex:1;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
-.hero{max-width:1000px;width:100%;display:flex;flex-direction:column;align-items:center;gap:56px;}
+.hero{max-width:1000px;width:100%;display:flex;flex-direction:column;align-items:center;gap:52px;}
 .headline{text-align:center;}
-.headline h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,6vw,4rem);line-height:1.08;
-  background:linear-gradient(120deg,#fff 20%,rgba(255,255,255,.7) 50%,var(--accent) 100%);
+.headline h1{font-family:'Outfit',sans-serif;font-weight:800;font-size:clamp(2.2rem,6vw,4rem);line-height:1.06;letter-spacing:-1px;
+  background:linear-gradient(120deg,var(--text) 20%,var(--accent) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;}
 .headline p{color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:520px;margin:0 auto;}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;}
 @media(max-width:660px){.cards{grid-template-columns:1fr;}}
-.card{background:var(--surface);border:2px solid var(--border);border-radius:24px;padding:36px;display:flex;flex-direction:column;gap:20px;transition:all .3s;position:relative;overflow:hidden;}
+.card{background:var(--surface);border:2px solid var(--border);border-radius:24px;padding:36px;display:flex;flex-direction:column;gap:20px;transition:all .3s;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(91,77,232,.06);}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s;}
 .card.host::before{background:linear-gradient(90deg,var(--accent),var(--accent3));}
-.card.join::before{background:linear-gradient(90deg,var(--accent2),#ffb347);}
+.card.join::before{background:linear-gradient(90deg,var(--accent2),#e07b00);}
 .card:hover{transform:translateY(-5px);}
-.card.host:hover{border-color:var(--accent);box-shadow:0 16px 48px rgba(124,111,255,.2);}
-.card.join:hover{border-color:var(--accent2);box-shadow:0 16px 48px rgba(255,107,138,.2);}
+.card.host:hover{border-color:var(--accent);box-shadow:0 16px 48px rgba(91,77,232,.12);}
+.card.join:hover{border-color:var(--accent2);box-shadow:0 16px 48px rgba(232,67,110,.12);}
 .card:hover::before{opacity:1;}
 .card-icon{font-size:2.4rem;width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;}
-.card.host .card-icon{background:rgba(124,111,255,.12);}
-.card.join .card-icon{background:rgba(255,107,138,.12);}
-.card h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;}
+.card.host .card-icon{background:rgba(91,77,232,.1);}
+.card.join .card-icon{background:rgba(232,67,110,.1);}
+.card h2{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.5rem;color:var(--text);}
 .card p{color:var(--muted);font-size:.92rem;line-height:1.6;flex:1;}
 .card-features{display:flex;flex-direction:column;gap:7px;}
 .feat{display:flex;align-items:center;gap:9px;font-size:.83rem;color:var(--muted);}
 .feat::before{content:'→';color:var(--accent3);font-weight:700;flex-shrink:0;}
 .card.join .feat::before{color:var(--accent2);}
-input[type=text],input[type=email],input[type=password]{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s;}
-input:focus{border-color:var(--accent);}
-input.join-inp:focus{border-color:var(--accent2);}
+input[type=text],input[type=email],input[type=password]{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:1rem;outline:none;transition:border-color .2s,box-shadow .2s;}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,77,232,.1);}
+input.join-inp:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(232,67,110,.1);}
 input::placeholder{color:var(--muted);}
-.btn{width:100%;padding:14px;border-radius:12px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
-.btn-host{background:linear-gradient(135deg,var(--accent),#5a4fd9);color:#fff;box-shadow:0 6px 24px rgba(124,111,255,.35);}
-.btn-host:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,111,255,.5);}
-.btn-join{background:linear-gradient(135deg,var(--accent2),#c4375b);color:#fff;box-shadow:0 6px 24px rgba(255,107,138,.3);}
-.btn-join:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,107,138,.45);}
-.btn-outline{background:none;border:1.5px solid var(--border);color:var(--muted);box-shadow:none;}
-.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:none;}
-.pin-wrap{position:relative;}
-.pin-wrap input{text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;letter-spacing:14px;padding:14px 20px;}
-.pin-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-host{background:linear-gradient(135deg,var(--accent),#4338c9);color:#fff;box-shadow:0 6px 24px rgba(91,77,232,.25);}
+.btn-host:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(91,77,232,.35);}
+.btn-join{background:linear-gradient(135deg,var(--accent2),#c4375b);color:#fff;box-shadow:0 6px 24px rgba(232,67,110,.22);}
+.btn-join:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(232,67,110,.32);}
+.pin-input-wrap{position:relative;}
+.pin-input-wrap input{text-align:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:1.8rem;letter-spacing:14px;padding:14px 20px;}
+.pin-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px;}
 .divider{text-align:center;color:var(--muted);font-size:.8rem;position:relative;}
 .divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border);}
 .divider::before{left:0;}.divider::after{right:0;}
-.err-msg{font-size:.82rem;color:#ff5a72;text-align:center;display:none;}
+.btn-outline{background:var(--surface2);border:1.5px solid var(--accent);color:var(--accent);box-shadow:none;}
+.btn-outline:hover{background:rgba(91,77,232,.06);transform:translateY(-1px);}
 footer{position:relative;z-index:1;text-align:center;padding:18px;color:var(--muted);font-size:.76rem;border-top:1px solid var(--border);}
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border);padding:10px 22px;border-radius:999px;font-size:.86rem;transition:transform .3s;z-index:999;white-space:nowrap;}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface);border:1px solid var(--border);padding:10px 22px;border-radius:999px;font-size:.86rem;transition:transform .3s;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.1);color:var(--text);}
 #toast.show{transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 <nav>
-  <div class="logo">
-    <div class="logo-main">UBI <em>QuizZone</em></div>
-    <div class="logo-sub">Real-time Interactive Quizzes</div>
+  <div class="logo-wrap" style="display:flex;align-items:center;gap:10px;">
+    <svg width="34" height="34" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><defs><linearGradient id="hexG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5b4de8"/><stop offset="100%" stop-color="#3b82c4"/></linearGradient></defs><polygon points="21,2 38,11.5 38,30.5 21,40 4,30.5 4,11.5" fill="url(#hexG)"/><polygon points="21,6 34,13.5 34,28.5 21,36 8,28.5 8,13.5" fill="none" stroke="white" stroke-width="1" opacity="0.3"/><text x="21" y="26" text-anchor="middle" font-size="20" font-weight="900" fill="white" font-family="Outfit,sans-serif">Q</text><circle cx="13" cy="37" r="3" fill="#5b4de8"/><circle cx="21" cy="40" r="3" fill="#009e87"/><circle cx="29" cy="37" r="3" fill="#e8436e"/></svg>
+    <div>
+      <div class="logo">UBI <em>Quiz</em>Zone</div>
+      <div class="logo-sub">Real-time Interactive Quizzes</div>
+    </div>
   </div>
   <div class="nav-live"><div class="live-dot"></div> Live Mode</div>
 </nav>
 <main>
   <div class="hero">
     <div class="headline">
+      <div style="display:flex;justify-content:center;margin-bottom:18px;"><svg width="56" height="56" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><defs><linearGradient id="hexH" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5b4de8"/><stop offset="100%" stop-color="#3b82c4"/></linearGradient></defs><polygon points="21,2 38,11.5 38,30.5 21,40 4,30.5 4,11.5" fill="url(#hexH)"/><polygon points="21,6 34,13.5 34,28.5 21,36 8,28.5 8,13.5" fill="none" stroke="white" stroke-width="1" opacity="0.3"/><text x="21" y="26" text-anchor="middle" font-size="20" font-weight="900" fill="white" font-family="Outfit,sans-serif">Q</text><circle cx="13" cy="37" r="3" fill="#5b4de8"/><circle cx="21" cy="40" r="3" fill="#009e87"/><circle cx="29" cy="37" r="3" fill="#e8436e"/></svg></div>
       <h1>Quiz your audience,<br>in real time</h1>
       <p>Upload a spreadsheet, create a room, share the PIN. Participants join from any device — no app needed.</p>
     </div>
     <div class="cards">
-      <!-- HOST -->
       <div class="card host">
         <div class="card-icon">🎮</div>
         <h2>I'm a Host</h2>
@@ -93,17 +96,15 @@ footer{position:relative;z-index:1;text-align:center;padding:18px;color:var(--mu
         <div class="card-features">
           <div class="feat">Quiz library — save &amp; reuse quizzes</div>
           <div class="feat">Teacher Led or Participant Led mode</div>
-          <div class="feat">See live responses &amp; leaderboard</div>
-          <div class="feat">Export full results to Excel</div>
+          <div class="feat">Live responses &amp; leaderboard</div>
+          <div class="feat">Export detailed results to Excel</div>
         </div>
-        <div id="hostErr" class="err-msg"></div>
         <input type="email" id="hostEmail" placeholder="Your email address" autocomplete="email"/>
         <input type="password" id="hostPassword" placeholder="Password" autocomplete="current-password"/>
         <button class="btn btn-host" id="hostLoginBtn">🎮 &nbsp;Host a Quiz</button>
         <div class="divider">or</div>
         <button class="btn btn-outline" id="hostSignupBtn">Create Host Account</button>
       </div>
-      <!-- JOIN -->
       <div class="card join">
         <div class="card-icon">🙋</div>
         <h2>I'm a Participant</h2>
@@ -114,8 +115,7 @@ footer{position:relative;z-index:1;text-align:center;padding:18px;color:var(--mu
           <div class="feat">Answer questions in real time</div>
           <div class="feat">See your rank on the leaderboard</div>
         </div>
-        <div id="joinErr" class="err-msg"></div>
-        <div class="pin-wrap">
+        <div class="pin-input-wrap">
           <input class="join-inp" type="text" id="pinInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off"/>
           <button class="pin-clear" id="pinClear">✕</button>
         </div>
@@ -125,65 +125,51 @@ footer{position:relative;z-index:1;text-align:center;padding:18px;color:var(--mu
     </div>
   </div>
 </main>
-<footer>UBI QuizZone &mdash; Powered by Supabase &amp; Vercel</footer>
+<footer>UBI QuizZone — Powered by Supabase &amp; Vercel</footer>
 <div id="toast"></div>
-
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-window._sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  window._sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+</script>
+<script>
 function toast(msg,d=2600){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d);}
-
-// PIN input
 const pinInput=document.getElementById('pinInput');
 pinInput.addEventListener('input',()=>{pinInput.value=pinInput.value.replace(/\D/g,'').substring(0,6);});
 document.getElementById('pinClear').onclick=()=>pinInput.value='';
-
-// Host login
 document.getElementById('hostLoginBtn').onclick=async()=>{
   const email=document.getElementById('hostEmail').value.trim();
   const pass=document.getElementById('hostPassword').value;
-  const err=document.getElementById('hostErr');
-  err.style.display='none';
-  if(!email||!pass){err.textContent='⚠ Enter email and password';err.style.display='block';return;}
+  if(!email||!pass){toast('⚠ Enter email and password');return;}
   const btn=document.getElementById('hostLoginBtn');
   btn.textContent='Signing in…';btn.disabled=true;
   try{
     const{data,error}=await window._sb.auth.signInWithPassword({email,password:pass});
     if(error) throw error;
     window.location.href='host.html';
-  } catch(e){err.textContent='❌ '+e.message;err.style.display='block';btn.textContent='🎮 Host a Quiz';btn.disabled=false;}
+  } catch(e){toast('❌ '+e.message);btn.textContent='🎮 Host a Quiz';btn.disabled=false;}
 };
-
-// Host signup
 document.getElementById('hostSignupBtn').onclick=async()=>{
   const email=document.getElementById('hostEmail').value.trim();
   const pass=document.getElementById('hostPassword').value;
-  const err=document.getElementById('hostErr');
-  err.style.display='none';
-  if(!email||!pass){err.textContent='⚠ Enter email and password';err.style.display='block';return;}
-  if(pass.length<6){err.textContent='⚠ Password must be at least 6 characters';err.style.display='block';return;}
+  if(!email||!pass){toast('⚠ Enter email and password');return;}
+  if(pass.length<6){toast('⚠ Password must be at least 6 characters');return;}
   const btn=document.getElementById('hostSignupBtn');
   btn.textContent='Creating account…';btn.disabled=true;
   try{
     const{data,error}=await window._sb.auth.signUp({email,password:pass});
     if(error) throw error;
-    toast('✅ Account created! Check your email to confirm.',4000);
+    toast('✅ Account created! You can now log in.',4000);
     btn.textContent='Create Host Account';btn.disabled=false;
-  } catch(e){err.textContent='❌ '+e.message;err.style.display='block';btn.textContent='Create Host Account';btn.disabled=false;}
+  } catch(e){toast('❌ '+e.message);btn.textContent='Create Host Account';btn.disabled=false;}
 };
-
-// Join quiz
 document.getElementById('joinBtn').onclick=()=>{
   const pin=pinInput.value.trim();
   const nick=document.getElementById('nicknameInput').value.trim();
-  const err=document.getElementById('joinErr');
-  err.style.display='none';
-  if(pin.length!==6){err.textContent='⚠ Enter the 6-digit room PIN';err.style.display='block';return;}
-  if(!nick||nick.length<2){err.textContent='⚠ Enter a nickname (min 2 characters)';err.style.display='block';return;}
-  window.location.href='participant.html?pin='+pin+'&nick='+encodeURIComponent(nick);
+  if(pin.length!==6){toast('⚠ Enter the 6-digit room PIN');return;}
+  if(!nick){toast('⚠ Enter a nickname');return;}
+  window.location.href=`participant.html?pin=${pin}&nick=${encodeURIComponent(nick)}`;
 };
-
 document.getElementById('hostPassword').addEventListener('keydown',e=>{if(e.key==='Enter') document.getElementById('hostLoginBtn').click();});
 document.getElementById('nicknameInput').addEventListener('keydown',e=>{if(e.key==='Enter') document.getElementById('joinBtn').click();});
 </script>
