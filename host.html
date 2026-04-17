@@ -229,7 +229,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 .export-btn.summary{background:linear-gradient(135deg,var(--accent3),#00b4d8);color:#0a0a0f;box-shadow:0 4px 16px rgba(0,229,192,.2);}
 .export-btn.detailed{background:linear-gradient(135deg,var(--accent),#5a4fd9);color:#fff;box-shadow:0 4px 16px rgba(124,111,255,.25);}
 .export-btn:hover{transform:translateY(-1px);}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
 .modal-overlay.show{display:flex;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:16px;}
 .modal h3{font-family:'Outfit',sans-serif;font-weight:700;}
@@ -239,6 +239,49 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 .modal-btn{flex:1;padding:11px;border-radius:10px;border:none;font-family:'Outfit',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;}
 .modal-btn.save{background:linear-gradient(135deg,var(--accent),#5a4fd9);color:#fff;}
 .modal-btn.cancel{background:var(--surface2);border:1px solid var(--border);color:var(--muted);}
+.modal-btn.cancel:hover{border-color:var(--wrong);color:var(--wrong);}
+/* ── PREVIEW & EDIT MODAL ── */
+.preview-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.pm-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;gap:12px;}
+.pm-header h3{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.1rem;}
+.pm-stats{display:flex;gap:7px;flex-wrap:wrap;}
+.pm-stat{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:3px 11px;font-size:.73rem;font-weight:700;}
+.pm-stat.c1{color:var(--accent)}.pm-stat.c2{color:var(--accent3)}.pm-stat.c3{color:var(--accent2)}
+.pm-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:9px;min-height:0;}
+.pm-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0;flex-wrap:wrap;}
+/* ── qe-card: NO overflow:hidden so expanded body shows fully ── */
+.qe-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:13px;transition:border-color .2s;}
+.qe-card:hover{border-color:rgba(91,77,232,.25);}
+.qe-card.is-open{border-color:var(--accent);background:var(--surface);}
+.qe-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;border-radius:13px;}
+.qe-card.is-open .qe-header{border-radius:13px 13px 0 0;border-bottom:1px solid var(--border);}
+.qe-num{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:.75rem;flex-shrink:0;}
+.qe-type-badge{border-radius:999px;padding:2px 9px;font-size:.68rem;font-weight:700;flex-shrink:0;}
+.qe-type-badge.mcq{background:rgba(91,77,232,.1);color:var(--accent);}
+.qe-type-badge.multi{background:rgba(0,158,135,.1);color:var(--accent3);}
+.qe-type-badge.open{background:rgba(232,67,110,.1);color:var(--accent2);}
+.qe-q-preview{flex:1;font-size:.86rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.qe-actions{display:flex;gap:5px;flex-shrink:0;}
+.qe-btn{background:none;border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:.7rem;cursor:pointer;transition:all .18s;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600;}
+.qe-btn:hover{border-color:var(--accent);color:var(--accent);}
+.qe-btn.del:hover{border-color:var(--wrong);color:var(--wrong);}
+/* qe-body: hidden by default, flex when open */
+.qe-body{padding:14px;display:none;flex-direction:column;gap:12px;background:var(--surface);}
+.qe-body.open{display:flex;}
+.qe-field{display:flex;flex-direction:column;gap:5px;}
+.qe-field label{font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.qe-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;box-sizing:border-box;}
+.qe-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,77,232,.08);}
+.qe-ta{min-height:72px;resize:vertical;line-height:1.55;}
+.qe-select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;cursor:pointer;box-sizing:border-box;}
+.qe-select:focus{border-color:var(--accent);}
+/* Options grid — 2 cols on wide, 1 col on narrow */
+.qe-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:580px){.qe-opts-grid{grid-template-columns:1fr;}}
+.qe-opt-row{display:flex;align-items:center;gap:8px;}
+.qe-opt-lbl{font-size:.75rem;font-weight:800;color:var(--accent);width:18px;flex-shrink:0;text-align:center;}
+.add-q-btn{background:none;border:2px dashed var(--border);border-radius:12px;padding:12px;width:100%;font-family:'Outfit',sans-serif;font-weight:600;font-size:.86rem;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.add-q-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(91,77,232,.03);}
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface);border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.1);padding:9px 20px;border-radius:999px;font-size:.84rem;transition:transform .3s;z-index:9999;white-space:nowrap;color:var(--text);}
 #toast.show{transform:translateX(-50%) translateY(0);}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
@@ -282,7 +325,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
       </div>
     </div>
     <div class="quiz-meta-box" id="quizMetaBox">
-      <h3 id="quizMetaTitle">Quiz Ready ✓</h3>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+        <h3 id="quizMetaTitle" style="margin-bottom:0;">Quiz Ready ✓</h3>
+        <button class="qe-btn" style="padding:6px 14px;font-size:.8rem;border-radius:9px;" onclick="openPreviewEditor()">👁 Preview &amp; Edit</button>
+      </div>
       <div class="meta-stats">
         <div class="ms">Total <span class="c1" id="ms-total">0</span></div>
         <div class="ms">🔘 <span class="c1" id="ms-mcq">0</span></div>
@@ -434,9 +480,35 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
     </div>
   </div>
 </div>
+<!-- PREVIEW & EDIT MODAL -->
+<div class="modal-overlay" id="previewModal" style="overflow-y:auto;align-items:flex-start;padding:20px;">
+  <div class="preview-modal">
+    <div class="pm-header">
+      <div>
+        <h3>👁 Preview &amp; Edit Quiz</h3>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px;">Click any question to expand and edit</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div class="pm-stats">
+          <span class="pm-stat c1" id="pe-total">0 Qs</span>
+          <span class="pm-stat c1" id="pe-mcq">0 MCQ</span>
+          <span class="pm-stat c2" id="pe-multi">0 Multi</span>
+          <span class="pm-stat c3" id="pe-open">0 Open</span>
+        </div>
+        <button class="qe-btn" style="padding:5px 12px;" onclick="$('previewModal').classList.remove('show')">✕ Close</button>
+      </div>
+    </div>
+    <div class="pm-body" id="peBody"></div>
+    <div class="pm-footer">
+      <button class="qe-btn add-q-btn" style="width:auto;padding:8px 18px;border-style:solid;border-color:var(--accent3);color:var(--accent3);" onclick="addNewQuestion()">+ Add Question</button>
+      <button class="modal-btn cancel" style="width:auto;padding:9px 20px;" onclick="$('previewModal').classList.remove('show')">Cancel</button>
+      <button class="modal-btn save" style="width:auto;padding:9px 22px;" onclick="saveEditorChanges()">✅ Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <!-- END MID MODAL -->
-<div class="modal-overlay" id="endMidModal">
-  <div class="modal">
+<div class="modal-overlay" id="endMidModal">  <div class="modal">
     <h3>⏹ End Quiz Early?</h3>
     <p style="color:var(--muted);font-size:.9rem;line-height:1.6;">This will immediately end the quiz for all participants and show the final results. This cannot be undone.</p>
     <div class="modal-row">
@@ -929,8 +1001,305 @@ $('newRoomBtn').onclick=()=>{
 function generateQR(url){
   const s=document.createElement('script');
   s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-  s.onload=()=>{new QRCode($('qrCanvas'),{text:url,width:120,height:120,colorDark:'#7c6fff',colorLight:'#12121a'});};
+  s.onload=()=>{new QRCode($('qrCanvas'),{text:url,width:120,height:120,colorDark:'#5b4de8',colorLight:'#ffffff'});};
   document.head.appendChild(s);
+}
+
+// ══════════════════════════════════════
+//  PREVIEW & EDIT QUIZ
+// ══════════════════════════════════════
+let editQuestions = []; // working copy while editor is open
+
+function openPreviewEditor(){
+  editQuestions = JSON.parse(JSON.stringify(questions)); // deep copy
+  renderEditor();
+  $('previewModal').classList.add('show');
+}
+
+function updateEditorStats(){
+  $('pe-total').textContent = editQuestions.length + ' Q' + (editQuestions.length!==1?'s':'');
+  $('pe-mcq').textContent   = editQuestions.filter(q=>q.type==='mcq').length + ' MCQ';
+  $('pe-multi').textContent = editQuestions.filter(q=>q.type==='multi').length + ' Multi';
+  $('pe-open').textContent  = editQuestions.filter(q=>q.type==='open').length + ' Open';
+}
+
+function renderEditor(){
+  updateEditorStats();
+  const body = $('peBody');
+  body.innerHTML = '';
+  const L = ['A','B','C','D','E'];
+
+  editQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'qe-card';
+    card.id = 'qe_'+idx;
+
+    const typeBadge = q.type==='mcq'?'🔘 MCQ':q.type==='multi'?'☑️ Multi':'✍️ Open';
+    const typeClass = q.type;
+    const isFirst = idx===0;
+    const isLast  = idx===editQuestions.length-1;
+
+    // ── Header ──
+    const hdr = document.createElement('div');
+    hdr.className = 'qe-header';
+    hdr.onclick = ()=>toggleQE(idx);
+
+    const numEl = document.createElement('div');
+    numEl.className = 'qe-num';
+    numEl.textContent = idx+1;
+
+    const badgeEl = document.createElement('span');
+    badgeEl.className = 'qe-type-badge '+typeClass;
+    badgeEl.textContent = typeBadge;
+
+    const preview = document.createElement('div');
+    preview.className = 'qe-q-preview';
+    preview.textContent = q.question||'(no question text)';
+
+    const actWrap = document.createElement('div');
+    actWrap.className = 'qe-actions';
+    actWrap.onclick = e=>e.stopPropagation();
+
+    const upBtn = document.createElement('button');
+    upBtn.className='qe-btn move'; upBtn.textContent='↑'; upBtn.title='Move up';
+    upBtn.disabled=isFirst; upBtn.onclick=()=>moveQ(idx,-1);
+
+    const dnBtn = document.createElement('button');
+    dnBtn.className='qe-btn move'; dnBtn.textContent='↓'; dnBtn.title='Move down';
+    dnBtn.disabled=isLast; dnBtn.onclick=()=>moveQ(idx,1);
+
+    const delBtn = document.createElement('button');
+    delBtn.className='qe-btn del'; delBtn.textContent='🗑 Delete';
+    delBtn.onclick=()=>deleteQ(idx);
+
+    actWrap.append(upBtn, dnBtn, delBtn);
+    hdr.append(numEl, badgeEl, preview, actWrap);
+    card.appendChild(hdr);
+
+    // ── Body (edit fields) ──
+    const bodyDiv = document.createElement('div');
+    bodyDiv.className = 'qe-body';
+    bodyDiv.id = 'qeb_'+idx;
+
+    // Type selector
+    const typeField = makeField('Question Type');
+    const typeSel = document.createElement('select');
+    typeSel.className='qe-select'; typeSel.id='type_'+idx;
+    [['mcq','🔘 MCQ — Single Choice'],['multi','☑️ Multi-Select'],['open','✍️ Open Ended']].forEach(([v,t])=>{
+      const o=document.createElement('option'); o.value=v; o.textContent=t;
+      if(q.type===v) o.selected=true;
+      typeSel.appendChild(o);
+    });
+    typeSel.onchange=()=>changeQType(idx,typeSel.value);
+    typeField.appendChild(typeSel);
+    bodyDiv.appendChild(typeField);
+
+    // Question text
+    const qtxtField = makeField('Question Text');
+    const qtxtEl = document.createElement('textarea');
+    qtxtEl.className='qe-input qe-ta'; qtxtEl.id='qtxt_'+idx;
+    qtxtEl.placeholder='Enter your question…'; qtxtEl.value=q.question||'';
+    qtxtField.appendChild(qtxtEl);
+    bodyDiv.appendChild(qtxtField);
+
+    // Options A–E (only for MCQ and Multi)
+    if(q.type !== 'open'){
+      const opts = q.options||[];
+      const optsField = makeField('Answer Options');
+      const grid = document.createElement('div');
+      grid.className='qe-opts-grid';
+      [0,1,2,3,4].forEach(i=>{
+        const row = document.createElement('div');
+        row.className='qe-opt-row';
+        const lbl = document.createElement('span');
+        lbl.className='qe-opt-lbl'; lbl.textContent=L[i];
+        const inp = document.createElement('input');
+        inp.className='qe-input'; inp.id='opt_'+idx+'_'+i;
+        inp.value=opts[i]||'';
+        inp.placeholder='Option '+L[i]+(i<2?' (required)':' (optional)');
+        row.append(lbl, inp);
+        grid.appendChild(row);
+      });
+      optsField.appendChild(grid);
+      bodyDiv.appendChild(optsField);
+    }
+
+    // Correct Answer
+    if(q.type==='mcq'){
+      const ansField = makeField('Correct Answer');
+      const ansSel = document.createElement('select');
+      ansSel.className='qe-select'; ansSel.id='ans_'+idx;
+      L.slice(0,5).forEach(l=>{
+        const o=document.createElement('option'); o.value=l; o.textContent='Option '+l;
+        if(q.answer===l) o.selected=true;
+        ansSel.appendChild(o);
+      });
+      ansField.appendChild(ansSel);
+      bodyDiv.appendChild(ansField);
+    } else if(q.type==='multi'){
+      const ansField = makeField('Correct Answers (e.g. A,C)');
+      const ansInp = document.createElement('input');
+      ansInp.className='qe-input'; ansInp.id='ans_'+idx;
+      ansInp.value=(q.answer||[]).join(',');
+      ansInp.placeholder='e.g. A,C';
+      ansField.appendChild(ansInp);
+      bodyDiv.appendChild(ansField);
+    } else {
+      const ansField = makeField('Model Answer');
+      const ansTa = document.createElement('textarea');
+      ansTa.className='qe-input qe-ta'; ansTa.id='ans_'+idx;
+      ansTa.placeholder='Model answer for open-ended question';
+      ansTa.value=q.answer||'';
+      ansField.appendChild(ansTa);
+      bodyDiv.appendChild(ansField);
+    }
+
+    // Explanation
+    const expField = makeField('Explanation (optional — shown after reveal)');
+    const expInp = document.createElement('input');
+    expInp.className='qe-input'; expInp.id='exp_'+idx;
+    expInp.value=q.explanation||''; expInp.placeholder='Shown after answer is revealed';
+    expField.appendChild(expInp);
+    bodyDiv.appendChild(expField);
+
+    card.appendChild(bodyDiv);
+    body.appendChild(card);
+  });
+
+  // Add question button at bottom
+  const addBtn = document.createElement('button');
+  addBtn.className='add-q-btn';
+  addBtn.innerHTML='+ Add New Question';
+  addBtn.onclick=addNewQuestion;
+  body.appendChild(addBtn);
+}
+
+// Helper: create a labelled field wrapper
+function makeField(labelText){
+  const wrap = document.createElement('div');
+  wrap.className='qe-field';
+  const lbl = document.createElement('label');
+  lbl.textContent=labelText;
+  wrap.appendChild(lbl);
+  return wrap;
+}
+
+function toggleQE(idx){
+  const body = $('qeb_'+idx);
+  const card = $('qe_'+idx);
+  const isOpen = body.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.qe-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.qe-card').forEach(c=>c.classList.remove('is-open'));
+  // Open clicked (toggle)
+  if(!isOpen){
+    body.classList.add('open');
+    card.classList.add('is-open');
+    // Scroll into view
+    setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  }
+}
+
+function changeQType(idx, newType){
+  // Save current before type change
+  collectQData(idx);
+  editQuestions[idx].type = newType;
+  if(newType==='open'){
+    editQuestions[idx].options = [];
+    editQuestions[idx].answer = editQuestions[idx].answer||'';
+  } else {
+    if(!editQuestions[idx].options || editQuestions[idx].options.length<2)
+      editQuestions[idx].options = ['','','','',''];
+    if(newType==='multi' && !Array.isArray(editQuestions[idx].answer))
+      editQuestions[idx].answer = [];
+    if(newType==='mcq' && Array.isArray(editQuestions[idx].answer))
+      editQuestions[idx].answer = editQuestions[idx].answer[0]||'A';
+  }
+  renderEditor();
+  // Re-open the same card
+  setTimeout(()=>{ $('qe_'+idx).querySelector('.qe-header').click(); },30);
+}
+
+function collectQData(idx){
+  const q = editQuestions[idx];
+  const L = ['A','B','C','D','E'];
+  const typeEl = $('type_'+idx);
+  const txtEl  = $('qtxt_'+idx);
+  const ansEl  = $('ans_'+idx);
+  const expEl  = $('exp_'+idx);
+  if(typeEl) q.type = typeEl.value;
+  if(txtEl)  q.question = txtEl.value.trim();
+  if(expEl)  q.explanation = expEl.value.trim();
+  if(q.type !== 'open'){
+    q.options = [0,1,2,3,4].map(i=>{ const el=$('opt_'+idx+'_'+i); return el?el.value.trim():''; }).filter((v,i)=>i<2||v);
+  }
+  if(ansEl){
+    if(q.type==='mcq') q.answer = ansEl.value;
+    else if(q.type==='multi') q.answer = ansEl.value.toUpperCase().split(',').map(s=>s.trim()).filter(Boolean);
+    else q.answer = ansEl.value.trim();
+  }
+}
+
+function collectAllData(){
+  editQuestions.forEach((_,i)=>collectQData(i));
+}
+
+function deleteQ(idx){
+  if(editQuestions.length<=1){toast('⚠ Cannot delete — quiz must have at least 1 question');return;}
+  if(!confirm('Delete question '+(idx+1)+'?')) return;
+  collectAllData();
+  editQuestions.splice(idx,1);
+  renderEditor();
+  toast('🗑 Question '+(idx+1)+' deleted');
+}
+
+function moveQ(idx, dir){
+  const target = idx+dir;
+  if(target<0||target>=editQuestions.length) return;
+  collectAllData();
+  [editQuestions[idx],editQuestions[target]]=[editQuestions[target],editQuestions[idx]];
+  renderEditor();
+  setTimeout(()=>$('qe_'+target).scrollIntoView({behavior:'smooth',block:'nearest'}),30);
+}
+
+function addNewQuestion(){
+  collectAllData();
+  editQuestions.push({type:'mcq',question:'',options:['','','','',''],answer:'A',explanation:''});
+  renderEditor();
+  // Open the new question
+  setTimeout(()=>{
+    const newIdx=editQuestions.length-1;
+    $('qe_'+newIdx).querySelector('.qe-header').click();
+    $('qe_'+newIdx).scrollIntoView({behavior:'smooth',block:'start'});
+  },50);
+}
+
+function saveEditorChanges(){
+  collectAllData();
+  // Validate
+  const errors=[];
+  editQuestions.forEach((q,i)=>{
+    if(!q.question.trim()) errors.push('Q'+(i+1)+': Question text is empty');
+    if(q.type!=='open' && q.options.filter(Boolean).length<2) errors.push('Q'+(i+1)+': Need at least 2 options');
+    if(q.type==='mcq' && !q.answer) errors.push('Q'+(i+1)+': No correct answer selected');
+    if(q.type==='multi' && (!q.answer||!q.answer.length)) errors.push('Q'+(i+1)+': No correct answers selected');
+    if(q.type==='open' && !q.answer.trim()) errors.push('Q'+(i+1)+': Model answer is empty');
+  });
+  if(errors.length){
+    toast('⚠ Fix errors: '+errors.slice(0,2).join(' | ')+(errors.length>2?' + '+(errors.length-2)+' more':''));
+    return;
+  }
+  // Apply to main questions array
+  questions = editQuestions.map(q=>({...q}));
+  // Update meta stats display
+  $('ms-total').textContent = questions.length;
+  $('ms-mcq').textContent   = questions.filter(q=>q.type==='mcq').length;
+  $('ms-multi').textContent = questions.filter(q=>q.type==='multi').length;
+  $('ms-open').textContent  = questions.filter(q=>q.type==='open').length;
+  // Save to library if loaded from one
+  if(selectedLibId) saveLib($('quizTitleInput').value||'My Quiz', questions);
+  $('previewModal').classList.remove('show');
+  toast('✅ Quiz saved — '+questions.length+' questions ready!');
 }
 </script>
 </body>
