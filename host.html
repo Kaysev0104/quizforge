@@ -320,7 +320,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
       <div class="drop-zone" id="dropZone">
         <div class="drop-icon">📂</div>
         <h3>Drop your quiz file here</h3>
-        <p>CSV or Excel with <strong>type, question, option_a/b/c/d, answer</strong> columns</p>
+        <p>CSV or Excel with <strong>type, question, option_a/b/c/d/e, answer (A–E), explanation</strong> columns</p>
         <input type="file" id="fileInput" accept=".csv,.xlsx,.xls"/>
       </div>
     </div>
@@ -612,10 +612,32 @@ function parseRows(data){
     const exp=fk(r,['explanation','hint','Explanation'])||'';
     const type=detectType(r);
     if(type==='open') return {type:'open',question:String(q),answer:String(ans),explanation:exp};
-    const a=fk(r,['option_a','optiona','opt_a','option1']),b=fk(r,['option_b','optionb','opt_b','option2']);
+    const a=fk(r,['option_a','optiona','opt_a','option1']);
+    const b=fk(r,['option_b','optionb','opt_b','option2']);
     if(!a||!b) return null;
-    const c=fk(r,['option_c','optionc','opt_c','option3']),d=fk(r,['option_d','optiond','opt_d','option4']);
-    const opts=[a,b];if(c) opts.push(c);if(d) opts.push(d);
+    const c=fk(r,['option_c','optionc','opt_c','option3']);
+    const d=fk(r,['option_d','optiond','opt_d','option4']);
+    const e=fk(r,['option_e','optione','opt_e','option5']);
+    // Handle files where the 5th column header is null/undefined (unnamed column)
+    // In many exported Excel files, option_e appears as a null-keyed column
+    const nullColVal = r[null] || r[undefined] || r[''] || null;
+    const nullOpt = (nullColVal && typeof nullColVal==='string' && nullColVal.trim().length>1) ? nullColVal.trim() : null;
+    // Build options array — detect column order by checking which value maps to answer
+    // Your file layout: opt_a, opt_b, opt_c, [null col = D], opt_d = E
+    // Standard layout:  opt_a, opt_b, opt_c, opt_d, opt_e
+    const rawAns = fk(r,['answer','correct','Answer','correct_answer'])||'';
+    let opts = [a, b];
+    if(c) opts.push(c);
+    // If null column exists, it's D (slot 4); option_d becomes E (slot 5)
+    if(nullOpt && d){
+      opts.push(nullOpt); // D
+      opts.push(d);       // E
+    } else if(nullOpt){
+      opts.push(nullOpt); // D
+    } else {
+      if(d) opts.push(d); // D
+      if(e) opts.push(e); // E
+    }
     if(type==='multi'){const ca=String(ans).trim().toUpperCase().split(/[,;\s]+/).map(x=>x.trim()).filter(Boolean);return {type:'multi',question:String(q),options:opts,answer:ca,explanation:exp};}
     return {type:'mcq',question:String(q),options:opts,answer:String(ans).trim().toUpperCase(),explanation:exp};
   }).filter(Boolean);
