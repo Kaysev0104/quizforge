@@ -470,7 +470,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
   <div class="results-wrap">
     <h2>🏆 Final Results — <span id="finalQuizTitle" style="color:var(--accent3)"></span></h2>
     <div class="final-lb">
-      <table><thead><tr><th>#</th><th>Participant</th><th>Score</th><th>Correct</th><th>Partial</th><th>Wrong</th></tr></thead>
+      <table><thead><tr><th>#</th><th>Participant</th><th>Score</th><th>Base Pts</th><th>Speed Bonus</th><th>Correct</th><th>Partial</th><th>Wrong</th></tr></thead>
       <tbody id="finalResultsBody"></tbody></table>
     </div>
     <div class="export-row">
@@ -968,12 +968,23 @@ async function endQuiz(){
   await channel.send({type:'broadcast',event:'quiz_end',payload:{}});
   clearInterval(timerInterval);
   const{data:parts}=await sb.from('participants').select('*').eq('room_id',roomId).order('score',{ascending:false});
+  const{data:resps}=await sb.from('responses').select('*').eq('room_id',roomId);
   const medals=['🥇','🥈','🥉'],body=$('finalResultsBody'); body.innerHTML='';
   $('finalQuizTitle').textContent=currentQuizTitle;
   (parts||[]).forEach((p,i)=>{
     const wrong=Math.max(0,questions.length-(p.correct_count||0)-(p.partial_count||0));
+    // Compute base pts and speed bonus from responses
+    const pResps=(resps||[]).filter(r=>r.participant_id===p.id);
+    const basePts=pResps.reduce((acc,r)=>acc+(r.is_correct?100:r.is_partial?50:0),0);
+    const speedBonus=Math.max(0,(p.score||0)-basePts);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td>'+(medals[i]||i+1)+'</td><td>'+p.nickname+'</td><td style="color:var(--accent3);font-weight:700">'+(p.score||0)+'</td><td style="color:var(--correct)">'+(p.correct_count||0)+'</td><td style="color:var(--warn)">'+(p.partial_count||0)+'</td><td style="color:var(--wrong)">'+wrong+'</td>';
+    tr.innerHTML='<td>'+(medals[i]||i+1)+'</td><td>'+p.nickname+'</td>'
+      +'<td style="color:var(--accent3);font-weight:700">'+(p.score||0)+'</td>'
+      +'<td style="color:var(--muted)">'+basePts+'</td>'
+      +'<td style="color:#e8a800;font-weight:600">+'+(speedBonus>0?speedBonus:0)+'</td>'
+      +'<td style="color:var(--correct)">'+(p.correct_count||0)+'</td>'
+      +'<td style="color:var(--warn)">'+(p.partial_count||0)+'</td>'
+      +'<td style="color:var(--wrong)">'+wrong+'</td>';
     body.appendChild(tr);
   });
   show('viewFinalResults');
@@ -981,8 +992,14 @@ async function endQuiz(){
 // EXPORTS
 $('exportSummaryBtn').onclick=async()=>{
   const{data:parts}=await sb.from('participants').select('*').eq('room_id',roomId).order('score',{ascending:false});
+  const{data:resps}=await sb.from('responses').select('*').eq('room_id',roomId);
   if(!parts) return;
-  const rows=parts.map((p,i)=>({'Rank':i+1,'Nickname':p.nickname,'Score':p.score||0,'Correct':p.correct_count||0,'Partial':p.partial_count||0,'Wrong':Math.max(0,questions.length-(p.correct_count||0)-(p.partial_count||0)),'Joined At':new Date(p.joined_at).toLocaleString()}));
+  const rows=parts.map((p,i)=>{
+    const pResps=(resps||[]).filter(r=>r.participant_id===p.id);
+    const basePts=pResps.reduce((acc,r)=>acc+(r.is_correct?100:r.is_partial?50:0),0);
+    const speedBonus=Math.max(0,(p.score||0)-basePts);
+    return {'Rank':i+1,'Nickname':p.nickname,'Total Score':p.score||0,'Base Points':basePts,'Speed Bonus':speedBonus,'Correct':p.correct_count||0,'Partial':p.partial_count||0,'Wrong':Math.max(0,questions.length-(p.correct_count||0)-(p.partial_count||0)),'Joined At':new Date(p.joined_at).toLocaleString()};
+  });
   const ws=XLSX.utils.json_to_sheet(rows);
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Summary');
   XLSX.writeFile(wb,'UBI-QuizZone-Summary-'+roomPin+'.xlsx'); toast('📊 Summary exported!');
@@ -995,15 +1012,23 @@ $('exportDetailedBtn').onclick=async()=>{
   const rows=resps.map(r=>{
     const q=questions[r.question_index]||{};
     let ans=''; try{const p=JSON.parse(r.answer);ans=Array.isArray(p)?p.join(', '):String(p);}catch(e){ans=String(r.answer||'');}
-    return {'Participant':partMap[r.participant_id]||'','Q No':r.question_index+1,'Question':r.question_text||q.question||'','Type':r.question_type||q.type||'','Answer Given':ans,'Open Answer Text':r.open_answer_text||'','Correct Answer':q.type==='multi'?(q.answer||[]).join(', '):(q.answer||''),'Result':r.is_correct?'Correct':r.is_partial?'Partial':'Wrong','Points':r.points_awarded||0,'Score After':r.score_after||0,'Response Time (sec)':r.response_time_seconds||0,'Answered At':new Date(r.answered_at).toLocaleString()};
+    const basePts=r.is_correct?100:r.is_partial?50:0;
+    const speedBonus=Math.max(0,(r.points_awarded||0)-basePts);
+    return {'Participant':partMap[r.participant_id]||'','Q No':r.question_index+1,'Question':r.question_text||q.question||'','Type':r.question_type||q.type||'','Answer Given':ans,'Open Answer Text':r.open_answer_text||'','Correct Answer':q.type==='multi'?(q.answer||[]).join(', '):(q.answer||''),'Result':r.is_correct?'Correct':r.is_partial?'Partial':'Wrong','Base Points':basePts,'Speed Bonus':speedBonus,'Total Points':r.points_awarded||0,'Score After':r.score_after||0,'Response Time (sec)':r.response_time_seconds||0,'Answered At':new Date(r.answered_at).toLocaleString()};
   });
   const{data:sorted}=await sb.from('participants').select('*').eq('room_id',roomId).order('score',{ascending:false});
-  const sumRows=(sorted||[]).map((p,i)=>({'Rank':i+1,'Nickname':p.nickname,'Score':p.score||0,'Correct':p.correct_count||0,'Partial':p.partial_count||0,'Wrong':Math.max(0,questions.length-(p.correct_count||0)-(p.partial_count||0))}));
+  const sumRows=(sorted||[]).map((p,i)=>{
+    const pResps=resps.filter(r=>r.participant_id===p.id);
+    const basePts=pResps.reduce((acc,r)=>acc+(r.is_correct?100:r.is_partial?50:0),0);
+    const speedBonus=Math.max(0,(p.score||0)-basePts);
+    return {'Rank':i+1,'Nickname':p.nickname,'Total Score':p.score||0,'Base Points':basePts,'Speed Bonus':speedBonus,'Correct':p.correct_count||0,'Partial':p.partial_count||0,'Wrong':Math.max(0,questions.length-(p.correct_count||0)-(p.partial_count||0))};
+  });
   const qRows=questions.map((q,i)=>{
     const qr=resps.filter(r=>r.question_index===i);
     const correct=qr.filter(r=>r.is_correct).length,partial=qr.filter(r=>r.is_partial).length;
     const avgT=qr.length>0?(qr.reduce((a,r)=>a+(r.response_time_seconds||0),0)/qr.length).toFixed(1):0;
-    return {'Q No':i+1,'Question':q.question,'Type':q.type,'Correct Answer':q.type==='multi'?(q.answer||[]).join(', '):(q.answer||''),'Responses':qr.length,'Correct':correct,'Partial':partial,'Wrong':qr.length-correct-partial,'Avg Response Time (sec)':avgT,'% Correct':qr.length>0?Math.round(correct/qr.length*100)+'%':'—'};
+    const avgBonus=qr.filter(r=>r.is_correct).length>0?(qr.filter(r=>r.is_correct).reduce((a,r)=>a+Math.max(0,(r.points_awarded||0)-10),0)/qr.filter(r=>r.is_correct).length).toFixed(1):0;
+    return {'Q No':i+1,'Question':q.question,'Type':q.type,'Correct Answer':q.type==='multi'?(q.answer||[]).join(', '):(q.answer||''),'Responses':qr.length,'Correct':correct,'Partial':partial,'Wrong':qr.length-correct-partial,'Avg Response Time (sec)':avgT,'Avg Speed Bonus (correct only)':avgBonus,'% Correct':qr.length>0?Math.round(correct/qr.length*100)+'%':'—'};
   });
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(sumRows),'Leaderboard');
